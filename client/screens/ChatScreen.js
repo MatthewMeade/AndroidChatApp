@@ -12,7 +12,16 @@ class ChatScreen extends Component {
   render() {
     return (
       <View>
-        <Header centerComponent={{ text: this.props.navigation.getParam("contact"), style: { color: "#fff" } }} />
+        <Header
+          leftComponent={{
+            icon: "chevron-left",
+            type: "font-awesome",
+            color: "#fff",
+            onPress: () => this.props.navigation.navigate("contacts"),
+            underlayColor: "transparent",
+          }}
+          centerComponent={{ text: this.props.navigation.getParam("contact"), style: { color: "#fff" } }}
+        />
         <Transition appear="right">
           <Text>Some Content</Text>
         </Transition>
