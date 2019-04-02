@@ -28,7 +28,7 @@ class AuthScreen extends Component {
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.authenticated) {
-      this.props.navigation.navigate("map");
+      this.props.navigation.navigate("contacts");
     }
   }
 

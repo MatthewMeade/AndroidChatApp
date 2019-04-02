@@ -8,7 +8,7 @@ const { User } = require("./config/mongooseConfig");
 const { loginUserPassword, loginUserToken, logoutUser } = require("./functions/Auth");
 
 const socketAction = async (client, action) => {
-  console.log(`GOT ACTION: ${action.type}`);
+  console.log(`\nGOT ACTION: ${action.type} FROM ${client.id}`);
   // Client attempting to log in
   if (action.type === "server/signInPassword") {
     const { username, password } = action.payload;
@@ -27,8 +27,8 @@ const socketAction = async (client, action) => {
   }
 
   if (action.type === "server/getUsers") {
-    const users = await User.find().select("username", "online");
-    return emitToClient(client, "GET_USERS", { users });
+    const users = await User.find();
+    return emitToClient(client, "GET_USERS", users);
   }
 };
 
@@ -40,10 +40,12 @@ const emitToClient = (client, type, payload) => {
 // Socket Config
 io.on("connection", client => {
   client.on("action", action => {
+    console.log("\nNew Connection:" + client.id);
     console.log("Open Connections:" + io.engine.clientsCount);
     socketAction(client, action);
   });
   client.on("disconnect", () => {
+    console.log("\nClosed Connection:" + client.id);
     console.log("Open Connections:" + io.engine.clientsCount);
     logoutUser(client.id);
   });

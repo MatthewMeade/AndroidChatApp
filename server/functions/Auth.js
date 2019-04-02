@@ -9,13 +9,13 @@ function emitToClient(client, type, payload) {
   client.emit("action", { type, payload });
 }
 
-function setUserStatus(user, isOnline, connectionId) {
+async function setUserStatus(user, isOnline, connectionId) {
   console.log("SETTING STATUS TO: " + isOnline);
   if (!user) return;
 
   user.online = isOnline;
   user.connectionId = isOnline && connectionId;
-  user.save();
+  await user.save();
 }
 
 module.exports.loginUserPassword = async (username, password, client) => {
@@ -30,14 +30,14 @@ module.exports.loginUserPassword = async (username, password, client) => {
   }
 
   const payload = { id: user.id, name: user.name };
-  jwt.sign(payload, "SECRET", { expiresIn: 1000 * 60 * 60 * 24 * 30 }, (err, token) => {
+  jwt.sign(payload, "SECRET", { expiresIn: 1000 * 60 * 60 * 24 * 30 }, async (err, token) => {
     if (err) {
       return emitToClient(client, "LOGIN_FAIL", err);
     }
 
     user.token = token;
 
-    setUserStatus(user, true, client.id);
+    await setUserStatus(user, true, client.id);
     return emitToClient(client, "LOGIN_SUCCESS", { token });
   });
 };
@@ -52,11 +52,11 @@ module.exports.loginUserToken = async (token, client) => {
   }
 
   // Authenticate user
-  setUserStatus(user, true, client.id);
+  await setUserStatus(user, true, client.id);
   return emitToClient(client, "LOGIN_SUCCESS", { token });
 };
 
 module.exports.logoutUser = async connectionId => {
   const user = await User.findOne({ connectionId });
-  setUserStatus(user, false);
+  await setUserStatus(user, false);
 };

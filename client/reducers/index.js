@@ -1,10 +1,10 @@
 import { combineReducers } from "redux";
 import auth from "./authReducer";
-// import jobs from "./jobsReducer";
+import contacts from "./contactReducer";
 // import likedJobs from "./likesReducer";
 
 export default combineReducers({
   auth,
-  // jobs,
+  contacts,
   // likedJobs,
 });

@@ -11,7 +11,7 @@ import store from "./store";
 
 import AuthScreen from "./screens/AuthScreen";
 // import WelcomeScreen from "./screens/WelcomeScreen";
-import MapScreen from "./screens/MapScreen";
+import ContactScreen from "./screens/ContactScreen";
 // import DeckScreen from "./screens/DeckScreen";
 // import SettingsScreen from "./screens/SettingsScreen";
 // import ReviewScreen from "./screens/ReviewScreen";
@@ -27,7 +27,7 @@ const MainNavigator = createBottomTabNavigator(
     main: {
       screen: createBottomTabNavigator(
         {
-          map: MapScreen,
+          contacts: ContactScreen,
         },
         {
           tabBarOptions: { labelStyle: { fontSize: 12 } },
