@@ -1,6 +1,8 @@
 import { Notifications } from "expo";
 import React, { Component } from "react";
-import { createBottomTabNavigator, createAppContainer, createStackNavigator } from "react-navigation";
+import { createBottomTabNavigator, createAppContainer, createSwitchNavigator } from "react-navigation";
+import { FluidNavigator, Transition } from "react-navigation-fluid-transitions";
+
 import { Provider } from "react-redux";
 import { Icon } from "react-native-elements";
 import { Alert } from "react-native";
@@ -12,37 +14,23 @@ import store from "./store";
 import AuthScreen from "./screens/AuthScreen";
 // import WelcomeScreen from "./screens/WelcomeScreen";
 import ContactScreen from "./screens/ContactScreen";
-// import DeckScreen from "./screens/DeckScreen";
-// import SettingsScreen from "./screens/SettingsScreen";
-// import ReviewScreen from "./screens/ReviewScreen";
+import ChatScreen from "./screens/ChatScreen";
 
-const MainNavigator = createBottomTabNavigator(
+const MainNavigator = FluidNavigator(
   {
     auth: {
       screen: AuthScreen,
-      navigationOptions: {
-        tabBarVisible: false,
-      },
     },
-    main: {
-      screen: createBottomTabNavigator(
-        {
-          contacts: ContactScreen,
-        },
-        {
-          tabBarOptions: { labelStyle: { fontSize: 12 } },
-        }
-      ),
-      navigationOptions: {
-        tabBarVisible: false,
-      },
+    contacts: {
+      screen: ContactScreen,
+    },
+    chat: {
+      screen: ChatScreen,
     },
   },
   {
-    navigationOptions: {
-      tabBarVisible: false,
-    },
-    lazy: true,
+    backBehavior: "order",
+    transitionConfig: () => fromLeft(),
   }
 );
 

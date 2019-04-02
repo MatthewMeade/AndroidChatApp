@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { View, Text, TouchableNativeFeedback } from "react-native";
 import { connect } from "react-redux";
 import { Header, ListItem } from "react-native-elements";
+import { Transition } from "react-navigation-fluid-transitions";
 
 import { getContacts } from "../actions/contactActions";
 
@@ -17,7 +18,7 @@ class ContactScreen extends Component {
     return this.props.contacts.map(contact => (
       <TouchableNativeFeedback
         background={TouchableNativeFeedback.SelectableBackground()}
-        onPress={() => console.log("BUTTON PRESSED")}
+        onPress={() => this.props.navigation.navigate("chat", { contact: contact.username })}
         key={contact._id}
       >
         <View>
@@ -46,7 +47,10 @@ class ContactScreen extends Component {
     return (
       <View>
         <Header centerComponent={{ text: "Online Users", style: { color: "#fff" } }} />
-        {this.renderContacts()}
+
+        <Transition appear="bottom">
+          <View>{this.renderContacts()}</View>
+        </Transition>
       </View>
     );
   }
