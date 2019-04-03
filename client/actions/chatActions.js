@@ -5,7 +5,7 @@ export const sendMessage = (to, text, from) => dispatch => {
   });
 
   dispatch({
-    type: "NEW_MESSAGE",
+    type: "SEND_MESSAGE",
     payload: { from, to, text, date: Date.now() },
   });
 };

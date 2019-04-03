@@ -16,7 +16,9 @@ class ChatScreen extends Component {
   componentWillMount() {}
 
   renderMessages() {
-    return this.props.messages.map(msg => (
+    const contactUsername = this.props.navigation.getParam("contact");
+
+    return (this.props.messages[contactUsername] || []).map(msg => (
       <Message key={msg.date} from={msg.from} text={msg.text} isOutgoing={msg.from === this.props.username} />
     ));
   }
@@ -76,7 +78,7 @@ class ChatScreen extends Component {
 const mapStateToProps = state => ({
   contacts: state.contacts,
   username: state.auth.username,
-  messages: state.chat.messages,
+  messages: state.chat,
 });
 
 const mapDispatchToProps = { getContacts, sendMessage };
