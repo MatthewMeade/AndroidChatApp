@@ -33,7 +33,7 @@ window.navigator.userAgent = "react-native";
 socket.on("action", store.dispatch);
 
 store.subscribe(() => {
-  console.log("new client state", store.getState());
+  // console.log("new client state", store.getState());
 });
 
 export default store;

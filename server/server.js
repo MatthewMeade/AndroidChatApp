@@ -30,10 +30,42 @@ const socketAction = async (client, action) => {
     const users = await User.find();
     return emitToClient(client, "GET_USERS", users);
   }
+
+  // TODO: Refactor
+  if (action.type === "server/sendMessage") {
+    const { to, text } = action.payload;
+
+    const toUser = await User.findOne({ username: to });
+
+    // No user with that username
+    if (!toUser) {
+      return console.log("ERROR: UNKNOWN USER " + to);
+    }
+
+    console.log("NEW MESSAGE:");
+    console.log({ to, text });
+
+    // User is online
+    if (toUser.online) {
+      return emitByConnectionId(toUser.connectionId, "NEW_MESSAGE", {
+        from: user.username,
+        to,
+        text,
+        date: Date.now(),
+      });
+    }
+
+    // TODO: User is offline
+  }
+};
+
+const emitByConnectionId = (id, type, payload) => {
+  console.log(`EMITTING. Type: ${type} Payload: ${JSON.stringify(payload)}`);
+  io.to(id).emit("action", { type, payload });
 };
 
 const emitToClient = (client, type, payload) => {
-  // console.log(`EMITTING. Type: ${type} Payload: ${JSON.stringify(payload)}`);
+  console.log(`EMITTING. Type: ${type} Payload: ${JSON.stringify(payload)}`);
   client.emit("action", { type, payload });
 };
 

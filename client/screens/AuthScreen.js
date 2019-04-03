@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import { Input, Button } from "react-native-elements";
 import { AsyncStorage } from "react-native";
 
-import { SignInPassword, SignInToken } from "../actions/authActions";
+import { SignInPassword, SignInToken, loadStoredAuth } from "../actions/authActions";
 
 class AuthScreen extends Component {
   state = {
@@ -23,6 +23,7 @@ class AuthScreen extends Component {
     const token = await AsyncStorage.getItem("token");
     if (token) {
       this.props.SignInToken(token);
+      // this.props.loadStoredAuth();
     }
   }
 
@@ -166,7 +167,7 @@ const inputStyles = {
 
 const mapStateToProps = state => ({ authenticated: state.auth.authenticated, error: state.auth.err });
 
-const mapDispatchToProps = { SignInPassword, SignInToken };
+const mapDispatchToProps = { SignInPassword, SignInToken, loadStoredAuth };
 
 export default connect(
   mapStateToProps,

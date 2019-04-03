@@ -38,7 +38,7 @@ module.exports.loginUserPassword = async (username, password, client) => {
     user.token = token;
 
     await setUserStatus(user, true, client.id);
-    return emitToClient(client, "LOGIN_SUCCESS", { token });
+    return emitToClient(client, "LOGIN_SUCCESS", { token, username: user.username });
   });
 };
 
@@ -53,7 +53,7 @@ module.exports.loginUserToken = async (token, client) => {
 
   // Authenticate user
   await setUserStatus(user, true, client.id);
-  return emitToClient(client, "LOGIN_SUCCESS", { token });
+  return emitToClient(client, "LOGIN_SUCCESS", { token, username: user.username });
 };
 
 module.exports.logoutUser = async connectionId => {
