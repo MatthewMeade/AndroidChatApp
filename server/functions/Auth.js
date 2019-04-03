@@ -21,6 +21,11 @@ module.exports.loginUserPassword = async (client, { username, password }) => {
     user = await new User({ username, password }).save();
   }
 
+  const offlineMessages = user.queuedMessages;
+  user.queuedMessages = [];
+
+  offlineMessages.forEach(msg => emitToClient(client, "NEW_MESSAGE", msg));
+
   if (!user.validPassword(password)) {
     return emitToClient(client, "LOGIN_FAIL", { err: "Incorrect Password" });
   }
@@ -46,6 +51,11 @@ module.exports.loginUserToken = async (client, { token }) => {
   if (!user) {
     return emitToClient(client, "TOKEN_ERR", { err: "Invalid Token" });
   }
+
+  const offlineMessages = user.queuedMessages;
+  user.queuedMessages = [];
+
+  offlineMessages.forEach(msg => emitToClient(client, "NEW_MESSAGE", msg));
 
   // Authenticate user
   await setUserStatus(user, true, client.id);

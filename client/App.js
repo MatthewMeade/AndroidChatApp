@@ -3,13 +3,13 @@ import React, { Component } from "react";
 import { createBottomTabNavigator, createAppContainer, createSwitchNavigator } from "react-navigation";
 import { FluidNavigator, Transition } from "react-navigation-fluid-transitions";
 
-import { Provider } from "react-redux";
+import { Provider, connect } from "react-redux";
 import { Icon } from "react-native-elements";
 import { Alert } from "react-native";
 
 import store from "./store";
 
-// import registerForNotifications from "./services/pushNotifications";
+import registerForNotifications from "./services/pushNotifications";
 
 import AuthScreen from "./screens/AuthScreen";
 // import WelcomeScreen from "./screens/WelcomeScreen";
@@ -38,7 +38,7 @@ const AppContainer = createAppContainer(MainNavigator);
 
 class App extends Component {
   componentDidMount() {
-    // registerForNotifications();
+    registerForNotifications(store);
     Notifications.addListener(notification => {
       const {
         data: { text },

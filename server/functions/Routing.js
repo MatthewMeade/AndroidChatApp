@@ -3,6 +3,8 @@ const { loginUserPassword, loginUserToken, logoutUser, isAuthenticated } = requi
 const { sendMessage } = require("./Messages");
 const { getUsers } = require("./Users");
 
+const { registerForNotifications } = require("./Notifications");
+
 module.exports = async (client, action) => {
   console.log(`\nGOT ACTION: ${action.type} FROM ${client.id}`);
 
@@ -23,8 +25,11 @@ module.exports = async (client, action) => {
     return getUsers(client);
   }
 
-  // TODO: Refactor
   if (action.type === "server/sendMessage") {
     return sendMessage(user, action.payload);
+  }
+
+  if (action.type === "server/registerForNotifications") {
+    return registerForNotifications(user, action.payload);
   }
 };

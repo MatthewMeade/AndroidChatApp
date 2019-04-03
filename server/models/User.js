@@ -10,6 +10,8 @@ const UserSchema = new Schema({
   online: { type: Boolean, default: false },
   connectionId: { type: String, default: null },
   token: { type: String, default: null },
+  queuedMessages: { type: Array, default: [] },
+  notificationToken: { type: String, default: null },
 });
 
 UserSchema.plugin(uniqueValidator);
