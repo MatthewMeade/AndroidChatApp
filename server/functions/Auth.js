@@ -3,22 +3,18 @@ const jwt = require("jsonwebtoken");
 const mongoose = require("mongoose");
 const User = mongoose.model("User");
 
-// TODO: Refactor
-function emitToClient(client, type, payload) {
-  // console.log(`EMITTING. Type: ${type} Payload: ${JSON.stringify(payload)}`);
-  client.emit("action", { type, payload });
-}
+const { emitByConnectionId, emitToClient } = require("./SocketFunctions");
 
-async function setUserStatus(user, isOnline, connectionId) {
-  console.log("SETTING STATUS TO: " + isOnline);
-  if (!user) return;
+module.exports.isAuthenticated = async client => {
+  const user = await User.findOne({ connectionId: client.id });
+  if (!user) {
+    emitToClient(client, "AUTH_ERROR", { err: "Not Authenticated" });
+    return false;
+  }
+  return user;
+};
 
-  user.online = isOnline;
-  user.connectionId = isOnline && connectionId;
-  await user.save();
-}
-
-module.exports.loginUserPassword = async (username, password, client) => {
+module.exports.loginUserPassword = async (client, { username, password }) => {
   let user = await User.findOne({ username });
 
   if (!user) {
@@ -42,7 +38,7 @@ module.exports.loginUserPassword = async (username, password, client) => {
   });
 };
 
-module.exports.loginUserToken = async (token, client) => {
+module.exports.loginUserToken = async (client, { token }) => {
   // Find user by token
   const user = await User.findOne({ token });
 
@@ -60,3 +56,12 @@ module.exports.logoutUser = async connectionId => {
   const user = await User.findOne({ connectionId });
   await setUserStatus(user, false);
 };
+
+async function setUserStatus(user, isOnline, connectionId) {
+  console.log("SETTING STATUS TO: " + isOnline);
+  if (!user) return;
+
+  user.online = isOnline;
+  user.connectionId = isOnline && connectionId;
+  await user.save();
+}

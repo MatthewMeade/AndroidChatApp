@@ -1,0 +1,30 @@
+// Auth Functions
+const { loginUserPassword, loginUserToken, logoutUser, isAuthenticated } = require("./Auth");
+const { sendMessage } = require("./Messages");
+const { getUsers } = require("./Users");
+
+module.exports = async (client, action) => {
+  console.log(`\nGOT ACTION: ${action.type} FROM ${client.id}`);
+
+  // Client attempting to log in
+  if (action.type === "server/signInPassword") {
+    return loginUserPassword(client, action.payload);
+  }
+
+  if (action.type === "server/signInToken") {
+    return loginUserToken(client, action.payload);
+  }
+
+  // Ensure socket user is logged in
+  const user = await isAuthenticated(client);
+  if (!user) return;
+
+  if (action.type === "server/getUsers") {
+    return getUsers(client);
+  }
+
+  // TODO: Refactor
+  if (action.type === "server/sendMessage") {
+    return sendMessage(user, action.payload);
+  }
+};
