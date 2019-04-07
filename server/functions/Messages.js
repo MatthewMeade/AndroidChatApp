@@ -24,7 +24,7 @@ module.exports.sendMessage = async (user, { to, text }) => {
 
   // User is online
   if (toUser.online) {
-    return emitByConnectionId(toUser.connectionId, "NEW_MESSAGE", newMsg);
+    return emitByConnectionId(toUser.connectionId, "NEW_MESSAGE", msg);
   }
 
   const { notificationToken } = toUser;

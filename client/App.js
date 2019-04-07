@@ -7,7 +7,10 @@ import { Provider, connect } from "react-redux";
 import { Icon } from "react-native-elements";
 import { Alert } from "react-native";
 
-import store from "./store";
+import wat from "./store";
+const { store, persistor } = wat;
+
+import { PersistGate } from "redux-persist/integration/react";
 
 import registerForNotifications from "./services/pushNotifications";
 
@@ -51,9 +54,12 @@ class App extends Component {
     });
   }
   render() {
+    console.log("WAT3:", wat.store);
     return (
       <Provider store={store}>
-        <AppContainer />
+        <PersistGate loading={null} persistor={persistor}>
+          <AppContainer />
+        </PersistGate>
       </Provider>
     );
   }

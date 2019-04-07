@@ -12,11 +12,11 @@
     "react": "16.5.0",
     "react-native": "https://github.com/expo/react-native/archive/sdk-32.0.0.tar.gz",
     "react-native-elements": "^1.1.0",
-    "react-navigation": "^3.5.1",
+    "react-navigation": "^3.6.1",
     "react-navigation-fluid-transitions": "^0.3.1",
     "react-redux": "^6.0.1",
     "redux": "^4.0.1",
-    "redux-persist": "^4.6.0",
+    "redux-persist": "^5.10.0",
     "redux-socket.io": "^1.4.0",
     "redux-thunk": "^2.3.0",
     "socket.io-client": "^2.2.0"

@@ -24,11 +24,13 @@ class AuthScreen extends Component {
     if (token) {
       this.props.SignInToken(token);
       // this.props.loadStoredAuth();
+      this.props.navigation.navigate("contacts");
     }
   }
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.authenticated) {
+      console.log("AUTHENTICATED");
       this.props.navigation.navigate("contacts");
     }
   }
