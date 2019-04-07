@@ -54,7 +54,6 @@ class App extends Component {
     });
   }
   render() {
-    console.log("WAT3:", wat.store);
     return (
       <Provider store={store}>
         <PersistGate loading={null} persistor={persistor}>
