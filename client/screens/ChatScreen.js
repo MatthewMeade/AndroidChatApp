@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { View, Text, ScrollView, KeyboardAvoidingView } from "react-native";
+import { View, Text, ScrollView, KeyboardAvoidingView, TouchableNativeFeedback } from "react-native";
 import { connect } from "react-redux";
 import { Header, Input, Icon, Avatar } from "react-native-elements";
 import { Transition } from "react-navigation-fluid-transitions";
@@ -34,16 +34,21 @@ class ChatScreen extends Component {
   };
 
   render() {
+    const leftComponent = (
+      <TouchableNativeFeedback
+        onPress={() => {
+          this.props.navigation.navigate("contacts");
+        }}
+      >
+        <View style={{ padding: 15 }}>
+          <Icon name="chevron-left" type="font-awesome" color="white" />
+        </View>
+      </TouchableNativeFeedback>
+    );
     return (
       <View style={{ flex: 1 }}>
         <Header
-          leftComponent={{
-            icon: "chevron-left",
-            type: "font-awesome",
-            color: "#fff",
-            onPress: () => this.props.navigation.navigate("contacts"),
-            underlayColor: "transparent",
-          }}
+          leftComponent={leftComponent}
           centerComponent={{ text: this.props.navigation.getParam("contact"), style: { color: "#fff" } }}
         />
 

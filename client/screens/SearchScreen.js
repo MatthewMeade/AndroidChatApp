@@ -54,18 +54,21 @@ class SearchScreen extends Component {
       });
   }
   render() {
+    const leftComponent = (
+      <TouchableNativeFeedback
+        onPress={() => {
+          this.props.navigation.navigate("contacts");
+        }}
+      >
+        <View style={{ padding: 15 }}>
+          <Icon name="chevron-left" type="font-awesome" color="white" />
+        </View>
+      </TouchableNativeFeedback>
+    );
+
     return (
       <View>
-        <Header
-          leftComponent={{
-            icon: "chevron-left",
-            type: "font-awesome",
-            color: "#fff",
-            onPress: () => this.props.navigation.navigate("contacts"),
-            underlayColor: "transparent",
-          }}
-          centerComponent={{ text: "Search Users", style: { color: "#fff" } }}
-        />
+        <Header leftComponent={leftComponent} centerComponent={{ text: "Search Users", style: { color: "#fff" } }} />
 
         <View>
           <Input

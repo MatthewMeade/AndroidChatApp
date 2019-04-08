@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { View, Text, TouchableNativeFeedback } from "react-native";
 import { connect } from "react-redux";
-import { Header, ListItem } from "react-native-elements";
+import { Header, ListItem, Icon } from "react-native-elements";
 import { Transition } from "react-navigation-fluid-transitions";
 
 import { getContacts } from "../actions/contactActions";
@@ -57,22 +57,23 @@ class ContactScreen extends Component {
         );
       });
   }
+
   render() {
+    const rightComponent = (
+      <TouchableNativeFeedback
+        onPress={() => {
+          console.log("BUTTON PRESSED");
+          this.props.navigation.navigate("search");
+        }}
+      >
+        <View style={{ padding: 15 }}>
+          <Icon name="plus" type="font-awesome" color="white" />
+        </View>
+      </TouchableNativeFeedback>
+    );
     return (
       <View>
-        <Header
-          centerComponent={{ text: "Online Users", style: { color: "#fff" } }}
-          rightComponent={{
-            icon: "plus",
-            type: "font-awesome",
-            color: "#fff",
-            onPress: () => {
-              console.log("BUTTON PRESSED");
-              this.props.navigation.navigate("search");
-            },
-            underlayColor: "transparent",
-          }}
-        />
+        <Header centerComponent={{ text: "Online Users", style: { color: "#fff" } }} rightComponent={rightComponent} />
 
         <Transition appear="bottom" delay={false}>
           <View>{this.renderContacts()}</View>

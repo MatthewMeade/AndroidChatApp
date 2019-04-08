@@ -36,6 +36,7 @@ const MainNavigator = createStackNavigator(
   {
     backBehavior: "order",
     headerMode: "none",
+    lazy: true,
   }
 );
 
