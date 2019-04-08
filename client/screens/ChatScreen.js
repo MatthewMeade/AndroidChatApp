@@ -13,10 +13,10 @@ class ChatScreen extends Component {
     messages: [],
     inputMessage: "",
   };
-  componentWillMount() {}
 
   renderMessages() {
     const contactUsername = this.props.navigation.getParam("contact");
+    console.log("CONTACT USERNAME:", contactUsername);
 
     return (this.props.messages[contactUsername] || []).map(msg => (
       <Message key={msg.date} from={msg.from} text={msg.text} isOutgoing={msg.from === this.props.username} />

@@ -23,10 +23,11 @@ class SearchScreen extends Component {
     return this.props.results
       .filter(user => user.username !== this.props.username)
       .map(user => {
+        console.log(user);
         return (
           <TouchableNativeFeedback
             background={TouchableNativeFeedback.SelectableBackground()}
-            onPress={() => this.props.navigation.navigate("chat", { user: user.username })}
+            onPress={() => this.props.navigation.navigate("chat", { contact: user.username })}
             key={user._id}
           >
             <View>
