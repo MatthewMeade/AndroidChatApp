@@ -48,27 +48,25 @@ class ChatScreen extends Component {
         />
 
         <KeyboardAvoidingView behavior="padding" style={{ flex: 1 }}>
-          <Transition appear="right">
-            <View style={{ flexDirection: "column", justifyContent: "flex-end", flex: 1 }}>
-              <ScrollView>{this.renderMessages()}</ScrollView>
+          <View style={{ flexDirection: "column", justifyContent: "flex-end", flex: 1 }}>
+            <ScrollView>{this.renderMessages()}</ScrollView>
 
-              <View>
-                <Input
-                  placeholder="Enter your message..."
-                  rightIcon={{
-                    name: "sc-telegram",
-                    type: "evilicon",
-                    color: "#517fa4",
-                    onPress: () => this.sendMessagePressed(),
-                    size: 30,
-                  }}
-                  value={this.state.inputMessage}
-                  onChangeText={inputMessage => this.setState({ inputMessage })}
-                  multiline
-                />
-              </View>
+            <View>
+              <Input
+                placeholder="Enter your message..."
+                rightIcon={{
+                  name: "sc-telegram",
+                  type: "evilicon",
+                  color: "#517fa4",
+                  onPress: () => this.sendMessagePressed(),
+                  size: 30,
+                }}
+                value={this.state.inputMessage}
+                onChangeText={inputMessage => this.setState({ inputMessage })}
+                multiline
+              />
             </View>
-          </Transition>
+          </View>
         </KeyboardAvoidingView>
       </View>
     );

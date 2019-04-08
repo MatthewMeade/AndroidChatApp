@@ -8,6 +8,7 @@ import { getContacts } from "../actions/contactActions";
 
 class ContactScreen extends Component {
   componentWillMount() {
+    console.log("MOUNTING CONTACT SCREEN");
     this.props.getContacts();
   }
 
@@ -18,9 +19,6 @@ class ContactScreen extends Component {
       .filter(contact => contact.username !== this.props.username)
       .map(contact => {
         const messages = this.props.chat[contact.username] || [];
-        console.log("Messages:", messages);
-        console.log("username:", contact.username);
-        console.log("props:", this.props);
 
         let lastMessageText;
         if (messages.length !== 0) {
@@ -62,9 +60,21 @@ class ContactScreen extends Component {
   render() {
     return (
       <View>
-        <Header centerComponent={{ text: "Online Users", style: { color: "#fff" } }} />
+        <Header
+          centerComponent={{ text: "Online Users", style: { color: "#fff" } }}
+          rightComponent={{
+            icon: "plus",
+            type: "font-awesome",
+            color: "#fff",
+            onPress: () => {
+              console.log("BUTTON PRESSED");
+              this.props.navigation.navigate("search");
+            },
+            underlayColor: "transparent",
+          }}
+        />
 
-        <Transition appear="bottom">
+        <Transition appear="bottom" delay={false}>
           <View>{this.renderContacts()}</View>
         </Transition>
       </View>
@@ -73,7 +83,7 @@ class ContactScreen extends Component {
 }
 
 const mapStateToProps = state => ({
-  contacts: state.contacts,
+  contacts: state.contacts.contacts,
   username: state.auth.username,
   chat: state.chat,
 });

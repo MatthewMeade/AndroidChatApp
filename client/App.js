@@ -1,10 +1,9 @@
 import { Notifications } from "expo";
 import React, { Component } from "react";
-import { createBottomTabNavigator, createAppContainer, createSwitchNavigator } from "react-navigation";
-import { FluidNavigator, Transition } from "react-navigation-fluid-transitions";
+import { createAppContainer, createStackNavigator } from "react-navigation";
 
 import { Provider, connect } from "react-redux";
-import { Icon } from "react-native-elements";
+// import { Icon } from "react-native-elements";
 import { Alert } from "react-native";
 
 import wat from "./store";
@@ -15,11 +14,11 @@ import { PersistGate } from "redux-persist/integration/react";
 import registerForNotifications from "./services/pushNotifications";
 
 import AuthScreen from "./screens/AuthScreen";
-// import WelcomeScreen from "./screens/WelcomeScreen";
 import ContactScreen from "./screens/ContactScreen";
 import ChatScreen from "./screens/ChatScreen";
+import SearchScreen from "./screens/SearchScreen";
 
-const MainNavigator = FluidNavigator(
+const MainNavigator = createStackNavigator(
   {
     auth: {
       screen: AuthScreen,
@@ -30,10 +29,13 @@ const MainNavigator = FluidNavigator(
     chat: {
       screen: ChatScreen,
     },
+    search: {
+      screen: SearchScreen,
+    },
   },
   {
     backBehavior: "order",
-    transitionConfig: () => fromLeft(),
+    headerMode: "none",
   }
 );
 

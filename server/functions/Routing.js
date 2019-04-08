@@ -1,7 +1,7 @@
 // Auth Functions
 const { loginUserPassword, loginUserToken, logoutUser, isAuthenticated } = require("./Auth");
 const { sendMessage } = require("./Messages");
-const { getUsers } = require("./Users");
+const { getUsers, searchUsers } = require("./Users");
 
 const { registerForNotifications } = require("./Notifications");
 
@@ -23,6 +23,10 @@ module.exports = async (client, action) => {
 
   if (action.type === "server/getUsers") {
     return getUsers(client);
+  }
+
+  if (action.type === "server/searchUsers") {
+    return searchUsers(client, action.payload);
   }
 
   if (action.type === "server/sendMessage") {
