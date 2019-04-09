@@ -1,6 +1,6 @@
 // Auth Functions
 const { loginUserPassword, loginUserToken, logoutUser, isAuthenticated } = require("./Auth");
-const { sendMessage } = require("./Messages");
+const { sendMessage, updateTyping } = require("./Messages");
 const { getUsers, searchUsers } = require("./Users");
 
 const { registerForNotifications } = require("./Notifications");
@@ -35,5 +35,9 @@ module.exports = async (client, action) => {
 
   if (action.type === "server/registerForNotifications") {
     return registerForNotifications(user, action.payload);
+  }
+
+  if (action.type === "server/updateTypingStatus") {
+    return updateTyping(user, action.payload);
   }
 };

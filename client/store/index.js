@@ -7,8 +7,8 @@ import thunk from "redux-thunk";
 import { persistStore, persistReducer } from "redux-persist";
 import reducers from "../reducers";
 
+console.log("NEW SOCKET");
 let socket = io("http://192.168.2.40:5000", {
-  query: "session_id=" + "test123",
   jsonp: false,
   transports: ["websocket"],
 });
@@ -17,6 +17,7 @@ let socketIoMiddleware = createSocketIoMiddleware(socket, "server/");
 const persistConfig = {
   key: "root",
   storage: AsyncStorage,
+  blacklist: ["typingUsers"],
 };
 
 const persistedReducer = persistReducer(persistConfig, reducers);

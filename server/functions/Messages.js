@@ -34,3 +34,16 @@ module.exports.sendMessage = async (user, { to, text }) => {
   toUser.queuedMessages.push(msg);
   toUser.save();
 };
+
+module.exports.updateTyping = async (user, { to, isTyping }) => {
+  const toUser = await User.findOne({ username: to });
+
+  // No user with that username
+  if (!toUser) {
+    return console.log("ERROR: UNKNOWN USER " + to);
+  }
+
+  if (toUser.online) {
+    return emitByConnectionId(toUser.connectionId, "UPDATE_TYPING", { username: user.username, isTyping });
+  }
+};

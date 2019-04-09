@@ -9,3 +9,8 @@ export const sendMessage = (to, text, from) => dispatch => {
     payload: { from, to, text, date: Date.now() },
   });
 };
+
+export const updateTypingStatus = (to, isTyping) => ({
+  type: "server/updateTypingStatus",
+  payload: { to, isTyping },
+});

@@ -5,13 +5,14 @@ import { Header, Input, Icon, Avatar } from "react-native-elements";
 import { Transition } from "react-navigation-fluid-transitions";
 
 import { getContacts } from "../actions/contactActions";
-import { sendMessage } from "../actions/chatActions";
+import { sendMessage, updateTypingStatus } from "../actions/chatActions";
 import Message from "../components/Message";
 
 class ChatScreen extends Component {
   state = {
     messages: [],
     inputMessage: "",
+    isTyping: false,
   };
 
   renderMessages() {
@@ -29,8 +30,33 @@ class ChatScreen extends Component {
     const { username } = this.props;
 
     this.props.sendMessage(to, inputMessage, username);
-    // this.setState({ messages: [...this.state.messages, { from: { username }, date: Date.now(), text: inputMessage }] });
     this.setState({ inputMessage: "" });
+
+    this.props.updateTypingStatus(to, false);
+  };
+
+  inputUpdated = inputMessage => {
+    this.setState({ inputMessage });
+
+    const isTyping = inputMessage !== "";
+    if (isTyping !== this.state.isTyping) {
+      this.setState({ isTyping });
+
+      const to = this.props.navigation.getParam("contact");
+      this.props.updateTypingStatus(to, isTyping);
+    }
+  };
+
+  renderTyping = () => {
+    const username = this.props.navigation.getParam("contact");
+
+    console.log("TYPING USERS", this.props.typingUsers);
+    console.log("USERNAME", username);
+    if (this.props.typingUsers.indexOf(username) >= 0) {
+      return <Text style={styles.typingStyle}>{username} is typing...</Text>;
+    }
+
+    return null;
   };
 
   render() {
@@ -57,6 +83,7 @@ class ChatScreen extends Component {
             <ScrollView>{this.renderMessages()}</ScrollView>
 
             <View>
+              {this.renderTyping()}
               <Input
                 placeholder="Enter your message..."
                 rightIcon={{
@@ -67,7 +94,7 @@ class ChatScreen extends Component {
                   size: 30,
                 }}
                 value={this.state.inputMessage}
-                onChangeText={inputMessage => this.setState({ inputMessage })}
+                onChangeText={inputMessage => this.inputUpdated(inputMessage)}
                 multiline
               />
             </View>
@@ -78,13 +105,21 @@ class ChatScreen extends Component {
   }
 }
 
+const styles = {
+  typingStyle: {
+    color: "#666",
+    marginLeft: 10,
+  },
+};
+
 const mapStateToProps = state => ({
   contacts: state.contacts,
   username: state.auth.username,
   messages: state.chat,
+  typingUsers: state.typingUsers,
 });
 
-const mapDispatchToProps = { getContacts, sendMessage };
+const mapDispatchToProps = { getContacts, sendMessage, updateTypingStatus };
 
 export default connect(
   mapStateToProps,
