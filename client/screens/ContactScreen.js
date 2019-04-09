@@ -17,6 +17,7 @@ class ContactScreen extends Component {
 
     return this.props.contacts
       .filter(contact => contact.username !== this.props.username)
+      .filter(contact => this.props.chat[contact.username] !== undefined)
       .map(contact => {
         const messages = this.props.chat[contact.username] || [];
 

@@ -1,9 +1,9 @@
 {
   "packagerPort": 19001,
-  "packagerPid": 6976,
+  "packagerPid": 5052,
   "devToolsPort": 19002,
   "expoServerPort": 19000,
   "expoServerNgrokUrl": "https://im-9gn.mafumeade.client.exp.direct",
   "packagerNgrokUrl": "https://packager.im-9gn.mafumeade.client.exp.direct",
-  "ngrokPid": 11880
+  "ngrokPid": 11140
 }
