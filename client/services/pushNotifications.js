@@ -3,8 +3,12 @@ import { AsyncStorage } from "react-native";
 
 export default () => async dispatch => {
   // Check if permission already granted
-  const previousToken = await AsyncStorage.getItem("pushToken");
-  if (previousToken) return previousToken;
+  // const previousToken = await AsyncStorage.getItem("pushToken");
+  // if (previousToken)
+  //   return dispatch({
+  //     type: "server/registerForNotifications",
+  //     payload: { token: previousToken },
+  //   });
 
   // Ask for permission
   const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
@@ -14,6 +18,7 @@ export default () => async dispatch => {
 
   // Generate Token
   const token = await Notifications.getExpoPushTokenAsync();
+
   // Save token
   AsyncStorage.setItem("pushToken", token);
 

@@ -12,6 +12,7 @@ import AuthScreen from "./screens/AuthScreen";
 import ContactScreen from "./screens/ContactScreen";
 import ChatScreen from "./screens/ChatScreen";
 import SearchScreen from "./screens/SearchScreen";
+import SettingsScreen from "./screens/SettingsScreen";
 
 import LoadingWrapper from "./LoadingWrapper";
 
@@ -28,6 +29,9 @@ const MainNavigator = createStackNavigator(
     },
     search: {
       screen: SearchScreen,
+    },
+    settings: {
+      screen: SettingsScreen,
     },
   },
   {

@@ -18,6 +18,7 @@ class ContactScreen extends Component {
   }
 
   renderContacts() {
+    console.log("RENDERING CONTACTS");
     const { chat, contacts } = this.props;
 
     if (!contacts) return;
@@ -70,11 +71,21 @@ class ContactScreen extends Component {
   }
 
   render() {
-    console.log("WAT WAT WAT");
+    const leftComponent = (
+      <TouchableNativeFeedback
+        onPress={() => {
+          this.props.navigation.navigate("settings");
+        }}
+      >
+        <View style={{ padding: 15 }}>
+          <Icon name="cog" type="font-awesome" color="white" />
+        </View>
+      </TouchableNativeFeedback>
+    );
+
     const rightComponent = (
       <TouchableNativeFeedback
         onPress={() => {
-          console.log("BUTTON PRESSED");
           this.props.navigation.navigate("search");
         }}
       >
@@ -85,7 +96,11 @@ class ContactScreen extends Component {
     );
     return (
       <View>
-        <Header centerComponent={{ text: "Online Users", style: { color: "#fff" } }} rightComponent={rightComponent} />
+        <Header
+          centerComponent={{ text: "Online Users", style: { color: "#fff" } }}
+          rightComponent={rightComponent}
+          leftComponent={leftComponent}
+        />
 
         <Transition appear="bottom" delay={false}>
           <View>{this.renderContacts()}</View>

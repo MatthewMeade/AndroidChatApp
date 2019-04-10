@@ -6,11 +6,12 @@ module.exports.registerForNotifications = async (user, { token }) => {
   const otherTokenUsers = await User.find({ notificationToken: token });
 
   otherTokenUsers.forEach(u => {
+    if (u.username === user.username) return;
     u.notificationToken = "";
     u.save();
   });
 
-  console.log("TOKEN: ", token);
+  console.log("USERNAME:", user.username, "TOKEN: ", token);
   user.notificationToken = token;
   user.save();
 };

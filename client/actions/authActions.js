@@ -10,6 +10,13 @@ export const SignInToken = token => ({
   payload: { token },
 });
 
+export const signOut = () => ({
+  type: "server/logOut",
+});
+
+export const signOutLocal = () => ({
+  type: "LOG_OUT",
+});
 export const loadStoredAuth = () => async dispatch => {
   const [name, token] = await Promise.all([AsyncStorage.getItem("username"), AsyncStorage.getItem("token")]);
   dispatch({

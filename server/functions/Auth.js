@@ -64,6 +64,7 @@ module.exports.loginUserToken = async (client, { token }) => {
 
 module.exports.logoutUser = async connectionId => {
   const user = await User.findOne({ connectionId });
+
   await setUserStatus(user, false);
 };
 

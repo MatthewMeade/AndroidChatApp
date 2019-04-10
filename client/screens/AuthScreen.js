@@ -3,6 +3,7 @@ import { View, Text, ActivityIndicator } from "react-native";
 import { connect } from "react-redux";
 import { Input, Button, Overlay } from "react-native-elements";
 import { AsyncStorage } from "react-native";
+import { withNavigationFocus } from "react-navigation";
 
 import { SignInPassword, SignInToken, loadStoredAuth } from "../actions/authActions";
 
@@ -38,8 +39,19 @@ class AuthScreen extends Component {
   }
 
   async componentWillReceiveProps(nextProps) {
-    console.log("NEW PROPS");
-    console.log(nextProps);
+    if (nextProps.isFocused !== undefined && nextProps.isFocused) {
+      console.log(nextProps);
+      const token = await AsyncStorage.getItem("token");
+      if (token) {
+        this.setState({ tryingToken: true });
+        console.log("SIGNING IN WITH TOKEN");
+        this.props.SignInToken(token);
+      } else {
+        console.log("NO TOKEN, SETTING TO FALSE");
+        this.setState({ tryingToken: false });
+      }
+    }
+
     if (nextProps.authenticated) {
       console.log("AUTHENTICATED");
 
@@ -53,6 +65,7 @@ class AuthScreen extends Component {
       }
 
       AsyncStorage.setItem("username", this.props.username);
+      this.setState({ tryingToken: false });
 
       this.props.navigation.navigate("contacts");
     }
@@ -90,8 +103,6 @@ class AuthScreen extends Component {
   }
 
   render() {
-    console.log(this.state);
-    console.log(this.props);
     if (this.state.tryingToken) {
       return (
         <View style={{ justifyContent: "center", flex: 1 }}>
@@ -213,7 +224,9 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = { SignInPassword, SignInToken, loadStoredAuth, registerForNotifications };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(AuthScreen);
+export default withNavigationFocus(
+  connect(
+    mapStateToProps,
+    mapDispatchToProps
+  )(AuthScreen)
+);

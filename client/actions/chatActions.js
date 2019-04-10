@@ -14,3 +14,7 @@ export const updateTypingStatus = (to, isTyping) => ({
   type: "server/updateTypingStatus",
   payload: { to, isTyping },
 });
+
+export const clearMessages = () => ({
+  type: "CLEAR_MESSAGES",
+});

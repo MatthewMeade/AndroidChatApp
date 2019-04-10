@@ -39,6 +39,7 @@ export default (state = initialState, action) => {
       return newSendState;
 
     case "CLEAR_MESSAGES":
+      console.log("CLEARING MESSAGES");
       return { ...initialState };
 
     default:

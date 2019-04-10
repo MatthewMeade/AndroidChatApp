@@ -25,6 +25,10 @@ module.exports = async (client, action) => {
     return getUsers(client);
   }
 
+  if (action.type === "server/logOut") {
+    return logoutUser(client.id);
+  }
+
   if (action.type === "server/searchUsers") {
     return searchUsers(client, action.payload);
   }
