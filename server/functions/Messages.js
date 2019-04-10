@@ -28,7 +28,10 @@ module.exports.sendMessage = async (user, { to, text }) => {
   }
 
   const { notificationToken } = toUser;
-  sendNotification(notificationToken, `New message from ${user.username}`);
+
+  if (notificationToken && notificationToken !== "") {
+    sendNotification(notificationToken, `New message from ${user.username}`);
+  }
 
   // User is offline
   toUser.queuedMessages.push(msg);

@@ -1,15 +1,20 @@
 import React, { Component } from "react";
-import { View, Text } from "react-native";
+import { View, Text, ActivityIndicator } from "react-native";
 import { connect } from "react-redux";
-import { Input, Button } from "react-native-elements";
+import { Input, Button, Overlay } from "react-native-elements";
 import { AsyncStorage } from "react-native";
 
 import { SignInPassword, SignInToken, loadStoredAuth } from "../actions/authActions";
+
+import { getStore } from "../store";
+
+import registerForNotifications from "..//services/pushNotifications";
 
 class AuthScreen extends Component {
   state = {
     username: "",
     password: "",
+    tryingToken: true,
   };
 
   static navigationOptions = ({ navigation }) => ({
@@ -22,16 +27,36 @@ class AuthScreen extends Component {
   async componentDidMount() {
     const token = await AsyncStorage.getItem("token");
     if (token) {
+      this.setState({ tryingToken: true });
+      console.log("SIGNING IN WITH TOKEN");
       this.props.SignInToken(token);
-      // this.props.loadStoredAuth();
-      this.props.navigation.navigate("contacts");
+    } else {
+      console.log("NO TOKEN, SETTING TO FALSE");
+      this.setState({ tryingToken: false });
     }
   }
 
-  componentWillReceiveProps(nextProps) {
+  async componentWillReceiveProps(nextProps) {
+    console.log("NEW PROPS");
+    console.log(nextProps);
     if (nextProps.authenticated) {
       console.log("AUTHENTICATED");
+
+      this.props.registerForNotifications();
+
+      const lastUsername = await AsyncStorage.getItem("username");
+      if (lastUsername !== this.props.username) {
+        await getStore().persistor.purge();
+      }
+
+      AsyncStorage.setItem("username", this.props.username);
+
       this.props.navigation.navigate("contacts");
+    }
+
+    if (nextProps.error) {
+      console.log("AUTH ERROR:", nextProps.error);
+      this.setState({ tryingToken: false });
     }
   }
 
@@ -40,7 +65,7 @@ class AuthScreen extends Component {
   };
 
   renderInfo() {
-    if (this.props.error) {
+    if (this.props.error && this.props.error !== "Invalid Token") {
       console.log(this.props.error);
       return (
         <View>
@@ -62,6 +87,16 @@ class AuthScreen extends Component {
   }
 
   render() {
+    console.log(this.state);
+    console.log(this.props);
+    if (this.state.tryingToken) {
+      return (
+        <View style={{ justifyContent: "center", flex: 1 }}>
+          <ActivityIndicator size="large" animating={this.props.isLoading} color="red" />
+        </View>
+      );
+    }
+
     return (
       <View style={styles.authContainer}>
         <Text style={styles.heading}>Sign In</Text>
@@ -167,9 +202,13 @@ const inputStyles = {
   },
 };
 
-const mapStateToProps = state => ({ authenticated: state.auth.authenticated, error: state.auth.err });
+const mapStateToProps = state => ({
+  authenticated: state.auth.authenticated,
+  error: state.auth.err,
+  username: state.auth.username,
+});
 
-const mapDispatchToProps = { SignInPassword, SignInToken, loadStoredAuth };
+const mapDispatchToProps = { SignInPassword, SignInToken, loadStoredAuth, registerForNotifications };
 
 export default connect(
   mapStateToProps,
