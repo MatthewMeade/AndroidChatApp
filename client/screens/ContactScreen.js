@@ -5,6 +5,7 @@ import { Header, ListItem, Icon } from "react-native-elements";
 import { Transition } from "react-navigation-fluid-transitions";
 
 import { getContacts } from "../actions/contactActions";
+import { ScrollView } from "react-native-gesture-handler";
 
 class ContactScreen extends Component {
   componentWillMount() {
@@ -97,14 +98,14 @@ class ContactScreen extends Component {
     return (
       <View>
         <Header
-          centerComponent={{ text: "Online Users", style: { color: "#fff" } }}
+          centerComponent={{ text: "Contacts", style: { color: "#fff" } }}
           rightComponent={rightComponent}
           leftComponent={leftComponent}
         />
 
-        <Transition appear="bottom" delay={false}>
+        <ScrollView>
           <View>{this.renderContacts()}</View>
-        </Transition>
+        </ScrollView>
       </View>
     );
   }

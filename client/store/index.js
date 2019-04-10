@@ -10,7 +10,7 @@ import reducers from "../reducers";
 let socket, store, persistor;
 
 export const initStore = () => {
-  socket = io("http://192.168.2.40:5000", {
+  socket = io("https://socket-chat-app-server.herokuapp.com", {
     jsonp: false,
     transports: ["websocket"],
     pingIntreval: 1000,
