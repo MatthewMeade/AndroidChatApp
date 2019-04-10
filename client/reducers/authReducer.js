@@ -9,9 +9,12 @@ export default (state = initialState, action) => {
     case LOGIN_SUCCESS:
       console.log("LOGIN SUCCESS");
 
+      AsyncStorage.setItem("token", action.payload.token);
+
       return { token: action.payload.token, username: action.payload.username, authenticated: true };
 
     case LOGIN_FAIL:
+      console.log("LOGIN FAIL");
       return { token: null, authenticated: false, err: action.payload.err };
 
     case "LOG_OUT":

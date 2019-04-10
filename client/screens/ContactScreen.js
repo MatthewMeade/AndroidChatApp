@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { View, Text, TouchableNativeFeedback } from "react-native";
+import { View, Text, TouchableNativeFeedback, BackHandler } from "react-native";
 import { connect } from "react-redux";
 import { Header, ListItem, Icon } from "react-native-elements";
 import { Transition } from "react-navigation-fluid-transitions";
@@ -10,6 +10,11 @@ class ContactScreen extends Component {
   componentWillMount() {
     console.log("MOUNTING CONTACT SCREEN");
     this.props.getContacts();
+
+    BackHandler.addEventListener("hardwareBackPress", () => {
+      this.props.navigation.navigate("contacts");
+      return true;
+    });
   }
 
   renderContacts() {
@@ -65,6 +70,7 @@ class ContactScreen extends Component {
   }
 
   render() {
+    console.log("WAT WAT WAT");
     const rightComponent = (
       <TouchableNativeFeedback
         onPress={() => {

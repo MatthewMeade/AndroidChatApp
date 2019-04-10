@@ -25,6 +25,7 @@ class AuthScreen extends Component {
   });
 
   async componentDidMount() {
+    console.log("MOUNTED AUTH SCREEN");
     const token = await AsyncStorage.getItem("token");
     if (token) {
       this.setState({ tryingToken: true });
@@ -46,7 +47,9 @@ class AuthScreen extends Component {
 
       const lastUsername = await AsyncStorage.getItem("username");
       if (lastUsername !== this.props.username) {
-        await getStore().persistor.purge();
+        const { store, persistor } = getStore();
+        persistor.purge();
+        store.dispatch({ type: "CLEAR_MESSAGES" });
       }
 
       AsyncStorage.setItem("username", this.props.username);

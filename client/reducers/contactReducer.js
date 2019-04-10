@@ -13,6 +13,11 @@ export default (state = initialState, action) => {
       return { ...state, contacts: action.payload };
 
     case "UPDATE_ONLINE_STATUS":
+      if (state.contacts.findIndex(c => c.username === action.payload.username) < 0) {
+        return {
+          contacts: [...state.contacts, { username: action.payload.username, online: action.payload.isOnline }],
+        };
+      }
       const newContacts = state.contacts.map(contact => {
         if (contact.username !== action.payload.username) return contact;
 

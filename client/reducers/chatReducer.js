@@ -38,6 +38,9 @@ export default (state = initialState, action) => {
 
       return newSendState;
 
+    case "CLEAR_MESSAGES":
+      return { ...initialState };
+
     default:
       return state;
   }

@@ -31,9 +31,10 @@ const MainNavigator = createStackNavigator(
     },
   },
   {
-    backBehavior: "order",
+    backBehavior: "contacts",
     headerMode: "none",
     lazy: true,
+    tabBarOptions: {},
   }
 );
 
