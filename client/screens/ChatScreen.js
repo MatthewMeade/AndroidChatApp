@@ -13,6 +13,7 @@ class ChatScreen extends Component {
     messages: [],
     inputMessage: "",
     isTyping: false,
+    contact: {},
   };
 
   renderMessages() {
@@ -22,6 +23,15 @@ class ChatScreen extends Component {
     return (this.props.messages[contactUsername] || []).map(msg => (
       <Message key={msg.date} from={msg.from} text={msg.text} isOutgoing={msg.from === this.props.username} />
     ));
+  }
+
+  componentWillMount() {
+    for (let c in this.props.contacts) {
+      let contact = this.props.contacts[c];
+      if (contact.username === this.props.navigation.getParam("contact")) {
+        this.setState({ contact });
+      }
+    }
   }
 
   sendMessagePressed = () => {
@@ -60,6 +70,7 @@ class ChatScreen extends Component {
   };
 
   render() {
+    const contactUsername = this.props.navigation.getParam("contact");
     const leftComponent = (
       <TouchableNativeFeedback
         onPress={() => {
@@ -71,12 +82,24 @@ class ChatScreen extends Component {
         </View>
       </TouchableNativeFeedback>
     );
+
+    const centerComponent = (
+      <View>
+        <Avatar rounded source={{ uri: `https://api.adorable.io/avatars/285/${contactUsername}` }} />
+        <Text style={{ color: "#fff", flex: 1, textAlign: "center" }}>{contactUsername}</Text>
+      </View>
+    );
+
+    const statusComponent = () => {
+      if (this.state.contact.online) {
+        return <Text style={{ color: "#00E500", textAlign: "center" }}>Online</Text>;
+      }
+      return <Text style={{ color: "#F00", textAlign: "center" }}>Offline</Text>;
+    };
+
     return (
       <View style={{ flex: 1 }}>
-        <Header
-          leftComponent={leftComponent}
-          centerComponent={{ text: this.props.navigation.getParam("contact"), style: { color: "#fff" } }}
-        />
+        <Header leftComponent={leftComponent} centerComponent={centerComponent} rightComponent={statusComponent()} />
 
         <KeyboardAvoidingView behavior="padding" style={{ flex: 1 }}>
           <View style={{ flexDirection: "column", justifyContent: "flex-end", flex: 1 }}>
@@ -113,7 +136,7 @@ const styles = {
 };
 
 const mapStateToProps = state => ({
-  contacts: state.contacts,
+  contacts: state.contacts.contacts,
   username: state.auth.username,
   messages: state.chat,
   typingUsers: state.typingUsers,
