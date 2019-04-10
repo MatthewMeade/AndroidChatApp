@@ -12,6 +12,16 @@ export default (state = initialState, action) => {
     case "GET_USERS":
       return { ...state, contacts: action.payload };
 
+    case "UPDATE_ONLINE_STATUS":
+      const newContacts = state.contacts.map(contact => {
+        if (contact.username !== action.payload.username) return contact;
+
+        contact.online = action.payload.isOnline;
+        return contact;
+      });
+
+      return { ...state, contacts: newContacts };
+
     default:
       return state;
   }

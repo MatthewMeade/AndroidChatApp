@@ -3,7 +3,7 @@ const jwt = require("jsonwebtoken");
 const mongoose = require("mongoose");
 const User = mongoose.model("User");
 
-const { emitByConnectionId, emitToClient } = require("./SocketFunctions");
+const { emitByConnectionId, emitToClient, broadcast } = require("./SocketFunctions");
 
 module.exports.isAuthenticated = async client => {
   const user = await User.findOne({ connectionId: client.id });
@@ -49,7 +49,7 @@ module.exports.loginUserToken = async (client, { token }) => {
 
   // Check if token is valid
   if (!user) {
-    return emitToClient(client, "TOKEN_ERR", { err: "Invalid Token" });
+    return emitToClient(client, "LOGIN_FAIL", { err: "Invalid Token" });
   }
 
   const offlineMessages = user.queuedMessages;
@@ -74,4 +74,6 @@ async function setUserStatus(user, isOnline, connectionId) {
   user.online = isOnline;
   user.connectionId = isOnline && connectionId;
   await user.save();
+
+  broadcast("UPDATE_ONLINE_STATUS", { username: user.username, isOnline });
 }

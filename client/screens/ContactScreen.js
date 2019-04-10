@@ -13,50 +13,55 @@ class ContactScreen extends Component {
   }
 
   renderContacts() {
-    if (!this.props.contacts) return;
+    const { chat, contacts } = this.props;
 
-    return this.props.contacts
+    if (!contacts) return;
+
+    // Filter
+    const filteredContacts = this.props.contacts
       .filter(contact => contact.username !== this.props.username)
-      .filter(contact => this.props.chat[contact.username] !== undefined)
-      .map(contact => {
-        const messages = this.props.chat[contact.username] || [];
+      .filter(contact => chat[contact.username] !== undefined)
+      .sort((a, b) => (chat[a.username].slice(-1)[0].date < chat[b.username].slice(-1)[0].date ? 1 : -1));
 
-        let lastMessageText;
-        if (messages.length !== 0) {
-          const { text, from } = messages[messages.length - 1];
-          lastMessageText = `${from}: ${text}`;
-        } else {
-          lastMessageText = "No Messages Yet";
-        }
+    return filteredContacts.map(contact => {
+      const messages = chat[contact.username] || [];
 
-        return (
-          <TouchableNativeFeedback
-            background={TouchableNativeFeedback.SelectableBackground()}
-            onPress={() => this.props.navigation.navigate("chat", { contact: contact.username })}
-            key={contact._id}
-          >
-            <View>
-              <ListItem
-                leftAvatar={{
-                  title: contact.username[0],
-                  source: { uri: `https://api.adorable.io/avatars/285/${contact.username}` },
-                  showEditButton: true,
-                  editButton: {
-                    name: "globe",
-                    type: "font-awesome",
-                    color: contact.online ? "#00E500" : "#F00",
-                    underlayColor: "#000",
-                  },
-                }}
-                title={contact.username}
-                subtitle={lastMessageText}
-                chevron
-                containerStyle={{ backgroundColor: "transparent" }}
-              />
-            </View>
-          </TouchableNativeFeedback>
-        );
-      });
+      let lastMessageText;
+      if (messages.length !== 0) {
+        const { text, from } = messages[messages.length - 1];
+        lastMessageText = `${from}: ${text}`;
+      } else {
+        lastMessageText = "No Messages Yet";
+      }
+
+      return (
+        <TouchableNativeFeedback
+          background={TouchableNativeFeedback.SelectableBackground()}
+          onPress={() => this.props.navigation.navigate("chat", { contact: contact.username })}
+          key={contact._id}
+        >
+          <View>
+            <ListItem
+              leftAvatar={{
+                title: contact.username[0],
+                source: { uri: `https://api.adorable.io/avatars/285/${contact.username}` },
+                showEditButton: true,
+                editButton: {
+                  name: "globe",
+                  type: "font-awesome",
+                  color: contact.online ? "#00E500" : "#F00",
+                  underlayColor: "#000",
+                },
+              }}
+              title={contact.username}
+              subtitle={lastMessageText}
+              chevron
+              containerStyle={{ backgroundColor: "transparent" }}
+            />
+          </View>
+        </TouchableNativeFeedback>
+      );
+    });
   }
 
   render() {

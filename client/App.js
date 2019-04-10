@@ -1,22 +1,19 @@
-import { Notifications } from "expo";
 import React, { Component } from "react";
 import { createAppContainer, createStackNavigator } from "react-navigation";
 
-import { Provider, connect } from "react-redux";
+import { Provider } from "react-redux";
 // import { Icon } from "react-native-elements";
-import { Alert } from "react-native";
 
-import wat from "./store";
-const { store, persistor } = wat;
+import { getStore } from "./store";
 
 import { PersistGate } from "redux-persist/integration/react";
-
-import registerForNotifications from "./services/pushNotifications";
 
 import AuthScreen from "./screens/AuthScreen";
 import ContactScreen from "./screens/ContactScreen";
 import ChatScreen from "./screens/ChatScreen";
 import SearchScreen from "./screens/SearchScreen";
+
+import LoadingWrapper from "./LoadingWrapper";
 
 const MainNavigator = createStackNavigator(
   {
@@ -43,24 +40,14 @@ const MainNavigator = createStackNavigator(
 const AppContainer = createAppContainer(MainNavigator);
 
 class App extends Component {
-  componentDidMount() {
-    registerForNotifications(store);
-    Notifications.addListener(notification => {
-      const {
-        data: { text },
-        origin,
-      } = notification;
-
-      if (origin === "received" && text) {
-        Alert.alert("New Push Notification", text, [{ text: "Ok." }]);
-      }
-    });
-  }
   render() {
+    const { store, persistor } = getStore();
     return (
       <Provider store={store}>
         <PersistGate loading={null} persistor={persistor}>
-          <AppContainer />
+          <LoadingWrapper>
+            <AppContainer />
+          </LoadingWrapper>
         </PersistGate>
       </Provider>
     );

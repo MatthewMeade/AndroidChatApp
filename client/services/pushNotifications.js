@@ -1,7 +1,7 @@
 import { Permissions, Notifications } from "expo";
 import { AsyncStorage } from "react-native";
 
-export default async store => {
+export default () => async dispatch => {
   // Check if permission already granted
   const previousToken = await AsyncStorage.getItem("pushToken");
   if (previousToken) return previousToken;
@@ -17,7 +17,18 @@ export default async store => {
   // Save token
   AsyncStorage.setItem("pushToken", token);
 
-  store.dispatch({
+  Notifications.addListener(notification => {
+    const {
+      data: { text },
+      origin,
+    } = notification;
+
+    if (origin === "received" && text) {
+      Alert.alert("New Push Notification", text, [{ text: "Ok." }]);
+    }
+  });
+
+  dispatch({
     type: "server/registerForNotifications",
     payload: { token },
   });
